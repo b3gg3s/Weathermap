@@ -503,7 +503,7 @@ class WeatherMap extends WeatherMapBase
         }
 
         if (($fontnumber > 0) && ($fontnumber < 6)) {
-            imagestring($image, $fontnumber, $x, $y - imagefontheight($fontnumber), $string, $colour);
+            imagestring($image, $fontnumber, round($x), round($y - imagefontheight($fontnumber)), $string, $colour);
             if ($angle != 0) {
                 wm_warn("Angled text doesn't work with non-FreeType fonts [WMWARN02]\n");
             }
@@ -1609,7 +1609,7 @@ class WeatherMap extends WeatherMapBase
                 $boxy += $this->height;
             }
 
-            $scale_im = imagecreatetruecolor($boxwidth + 1, $boxheight + 1);
+            $scale_im = imagecreatetruecolor(round($boxwidth + 1), round($boxheight + 1));
             $scale_ref = 'gdref_legend_' . $scalename;
 
             // Start with a transparent box, in case the fill or outline colour is 'none'
@@ -1717,12 +1717,12 @@ class WeatherMap extends WeatherMapBase
 
         switch ($which) {
             case "MIN":
-                $stamp = strftime($this->minstamptext, $this->min_data_time);
+                $stamp = @strftime($this->minstamptext, $this->min_data_time);
                 $pos_x = $this->mintimex;
                 $pos_y = $this->mintimey;
                 break;
             case "MAX":
-                $stamp = strftime($this->maxstamptext, $this->max_data_time);
+                $stamp = @strftime($this->maxstamptext, $this->max_data_time);
                 $pos_x = $this->maxtimex;
                 $pos_y = $this->maxtimey;
                 break;
@@ -3284,7 +3284,7 @@ class WeatherMap extends WeatherMapBase
         } else {
             $maptime = time();
         }
-        $this->datestamp = strftime($this->stamptext, $maptime);
+        $this->datestamp = @strftime($this->stamptext, $maptime);
 
         // do the basic prep work
         if ($this->background != '') {
