@@ -615,7 +615,7 @@ class WeatherMapNode extends WeatherMapItem
 		// Draw the icon, if any
 		if(isset($icon_im))
 		{
-			imagecopy($node_im, $icon_im, $icon_x1, $icon_y1, 0, 0, imagesx($icon_im), imagesy($icon_im));
+			imagecopy($node_im, $icon_im, round($icon_x1), round($icon_y1), 0, 0, imagesx($icon_im), imagesy($icon_im));
 			imagedestroy($icon_im);
 		}
 
@@ -632,7 +632,7 @@ class WeatherMapNode extends WeatherMapItem
 			// if there's an icon, then you can choose to have no background
 			if(! $col->is_none() )
 			{
-			    imagefilledrectangle($node_im, $label_x1, $label_y1, $label_x2, $label_y2, $col->gdallocate($node_im));
+			    imagefilledrectangle($node_im, round($label_x1), round($label_y1), round($label_x2), round($label_y2), $col->gdallocate($node_im));
 			}
 
 			if ($this->selected)
@@ -646,7 +646,7 @@ class WeatherMapNode extends WeatherMapItem
 				$olcol = new Colour($this->labeloutlinecolour);
 				if ($olcol->is_real())
 				{
-					imagerectangle($node_im, $label_x1, $label_y1, $label_x2, $label_y2, $olcol->gdallocate($node_im));
+					imagerectangle($node_im, round($label_x1), round($label_y1), round($label_x2), round($label_y2), $olcol->gdallocate($node_im));
 				}
 			}
 			#}
@@ -716,7 +716,7 @@ class WeatherMapNode extends WeatherMapItem
 		if(isset($this->image))
 		{
 			imagealphablending($im, true);
-			imagecopy ( $im, $this->image, $this->x - $this->centre_x, $this->y - $this->centre_y, 0, 0, imagesx($this->image), imagesy($this->image) );
+			imagecopy ( $im, $this->image, round($this->x - $this->centre_x), round($this->y - $this->centre_y), 0, 0, imagesx($this->image), imagesy($this->image) );
 		}
 
 	}
