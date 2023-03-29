@@ -269,7 +269,7 @@ function myimagecolorallocate($image, $red, $green, $blue)
 	// it's possible that we're being called early - just return straight away, in that case
 	if(!isset($image)) return(-1);
 	
-	$existing=imagecolorexact($image, $red, $green, $blue);
+	$existing=imagecolorexact($image, round($red), round($green), round($blue));
 
 	if ($existing > -1)
 		return $existing;
@@ -1875,7 +1875,7 @@ function wimagefilledrectangle( $image ,$x1, $y1, $x2, $y2, $color )
 	$r = $r/255; $g=$g/255; $b=$b/255; $a=(127-$a)/127;
 
 	metadump("FRECT $x1 $y1 $x2 $y2 $r $g $b $a");
-	return(imagefilledrectangle( $image ,$x1, $y1, $x2, $y2, $color ));
+	return(imagefilledrectangle( $image, round($x1), round($y1), round($x2), round($y2), $color ));
 }
 
 function wimagerectangle( $image ,$x1, $y1, $x2, $y2, $color )
@@ -1887,7 +1887,7 @@ function wimagerectangle( $image ,$x1, $y1, $x2, $y2, $color )
 	$r = $r/255; $g=$g/255; $b=$b/255; $a=(127-$a)/127;
 
 	metadump("RECT $x1 $y1 $x2 $y2 $r $g $b $a");
-	return(imagerectangle( $image ,$x1, $y1, $x2, $y2, $color ));
+	return(imagerectangle( $image, round($x1), round($y1), round($x2), round($y2), $color ));
 }
 
 function wimagepolygon($image, $points, $num_points, $color)
@@ -1907,7 +1907,13 @@ function wimagepolygon($image, $points, $num_points, $color)
 	
 	metadump("POLY $num_points ".$pts." $r $g $b $a");
 
-	return(imagepolygon($image, $points, $num_points, $color));
+	// Removing $num_points creates weird boxes. This needs a better fix.
+	// Likely count($points) is sometimes not equal to $num_points*2
+	//assert(count($points) == ($num_points*2));
+	if (count($points) != ($num_points*2)) {
+		return @imagepolygon($image, $points, $num_points, $color);
+	}
+	return imagepolygon($image, $points, $color);
 }
 
 function wimagefilledpolygon($image, $points, $num_points, $color)
@@ -1927,7 +1933,13 @@ function wimagefilledpolygon($image, $points, $num_points, $color)
 	
 	metadump("FPOLY $num_points ".$pts." $r $g $b $a");
 
-	return(imagefilledpolygon($image, $points, $num_points, $color));
+	// Removing $num_points creates weird boxes. This needs a better fix.
+	// Likely count($points) is sometimes not equal to $num_points*2
+	//assert(count($points) == ($num_points*2));
+	if (count($points) != ($num_points*2)) {
+		return @imagefilledpolygon($image, $points, $num_points, $color);
+	}
+	return imagefilledpolygon($image, $points, $color);
 }
 
 function wimagecreatetruecolor($width, $height)
